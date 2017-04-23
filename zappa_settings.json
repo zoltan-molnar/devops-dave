@@ -1,8 +1,12 @@
 {
     "production": {
+        "project_name": "devops-dave",
         "aws_region": "us-east-1",
         "app_function": "app.app",
-        "lambda_handler": "custom_handler.lambda_handler",
-        "s3_bucket": "zappa-devops-dave"
+        "lambda_handler": "lambda_handler.lambda_handler",
+        "s3_bucket": "zappa-devops-dave",
+        "manage_roles": false,
+        "role_name": "devops-dave-production",
+        "log_level": "DEBUG"
     }
 }
