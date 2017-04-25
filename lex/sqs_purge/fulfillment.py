@@ -1,9 +1,15 @@
+from lex.helpers import get_response
+
+
 def handler(event):
-    print('event:')
-    print(event)
+    response = get_response('sqs_purge', 'success')
     return {
         'dialogAction': {
             'type': 'Close',
-            'fulfillmentState': 'Fulfilled'
+            'fulfillmentState': 'Fulfilled',
+            "message": {
+              "contentType": "PlainText",
+              "content": response
+            },
         }
     }
