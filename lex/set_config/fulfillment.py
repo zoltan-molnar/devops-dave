@@ -1,18 +1,6 @@
-import logging
-from lex.lex_utils import get_team_id, get_user_id
-from lex.helpers import get_namespace, get_response, confirm
+from lex.helpers import get_namespace, get_id
+from lex.responses import fulfill, confirm
 from models import user_config
-
-
-def get_id(event):
-    namespace = event['currentIntent']['slots']['namespace']
-
-    if namespace == 'global':
-        return get_team_id(event['userId'])
-    elif namespace == 'local':
-        return get_user_id(event['userId'])
-
-    raise StandardError('WRONG_NAMESPACE')
 
 
 def handler(event):
@@ -33,14 +21,5 @@ def handler(event):
         'config': event['currentIntent']['slots']
     })
 
-    return {
-        'dialogAction': {
-            'type': 'Close',
-            'fulfillmentState': 'Fulfilled',
-            'message': {
-              'contentType': 'PlainText',
-              'content': get_response('set_config', 'success')
-            }
-        }
-    }
+    return fulfill(event, 'success')
 

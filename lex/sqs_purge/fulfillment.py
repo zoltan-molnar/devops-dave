@@ -1,16 +1,8 @@
-from lex.helpers import get_response, get_aws_config, validate_aws_config
+from lex.helpers import get_aws_config
+from lex.responses import fulfill
 
 
 def handler(event):
     config = get_aws_config(event['userId'])
     print('config %s' % str(config))
-    return {
-        'dialogAction': {
-            'type': 'Close',
-            'fulfillmentState': 'Fulfilled',
-            "message": {
-              "contentType": "PlainText",
-              "content": get_response('sqs_purge', 'success')
-            },
-        }
-    }
+    return fulfill(event, 'success')

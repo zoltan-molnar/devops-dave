@@ -1,4 +1,4 @@
-from lex.helpers import validate_aws_config
+from lex.responses import validate_aws_config
 
 
 def handler(event):

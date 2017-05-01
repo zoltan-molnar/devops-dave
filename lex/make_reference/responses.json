@@ -1,0 +1,7 @@
+{
+  "alias": ["Alias?"],
+  "target": ["Target?"],
+  "denied": ["I left your config as it was"],
+  "confirm": ["Overwrite other alias?"],
+  "success":["Alias saved!"]
+}
