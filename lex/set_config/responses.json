@@ -1,0 +1,6 @@
+{
+  "missing_namespace": ["Namespace, please?"],
+  "denied": ["I left your config as it was"],
+  "confirm": ["Overwrite other config?"],
+  "success":["Config saved!"]
+}

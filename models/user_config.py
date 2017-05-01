@@ -37,5 +37,6 @@ def update(item_id, params):
             ':created_at': str(datetime.utcnow()),
             ':last_modified_by': params['last_modified_by'],
             ':config': kms.encrypt(json.dumps(params['config']))
-        }
-    )
+        },
+        ReturnValues='ALL_NEW'
+    ).get('Attributes')

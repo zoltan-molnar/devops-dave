@@ -2,5 +2,11 @@
   "success": [
     "I did it what you have asked. As you asked. Like a true friend.",
     "I hope you meant it, because no turning back now."
-  ]
+  ],
+  "confirm": ["Are you sure, you want to do this?"],
+  "denied": ["I swear I didn't do it."],
+  "missing_aws_access_key": ["Access Key?????"],
+  "missing_aws_secret_key": ["Secret Key?????"],
+  "missing_aws_default_region": ["Region?????"]
 }
+e
