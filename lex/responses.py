@@ -42,13 +42,7 @@ def validate_aws_config(event):
             }
         })
 
-    return {
-        'sessionAttributes': event['sessionAttributes'] if event['sessionAttributes'] is not None else {},
-        'dialogAction': {
-            'type': 'Delegate',
-            'slots': event['currentIntent']['slots']
-        }
-    }
+    return delegate(event)
 
 
 def get_slot(event, slot_name, response):
@@ -63,6 +57,16 @@ def get_slot(event, slot_name, response):
                 'contentType': 'PlainText',
                 'content': get_response(event['currentIntent']['name'], response)
             }
+        }
+    }
+
+
+def delegate(event):
+    return {
+        'sessionAttributes': event['sessionAttributes'] if event['sessionAttributes'] is not None else {},
+        'dialogAction': {
+            'type': 'Delegate',
+            'slots': event['currentIntent']['slots']
         }
     }
 

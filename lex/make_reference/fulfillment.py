@@ -4,8 +4,8 @@ from models import user_alias
 
 
 def handler(event):
-    alias = event['currentIntent']['slots']['alias']
-    target = event['currentIntent']['slots']['target']
+    alias = str(event['currentIntent']['slots']['alias']).lower()
+    target = str(event['currentIntent']['slots']['target']).lower()
 
     item_id = get_id(event)
     item = user_alias.get(item_id)
