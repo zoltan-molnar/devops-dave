@@ -1,8 +1,12 @@
-from lex.helpers import get_aws_config
+from lex.helpers import get_target, get_aws_client, aws_manager_decorator
 from lex.responses import fulfill
 
 
-def handler(event):
-    config = get_aws_config(event['userId'])
-    print('config %s' % str(config))
+@aws_manager_decorator
+def handler(event, aws_config):
+    target = get_target(event)
+    sqs_client = get_aws_client('sqs', aws_config)
+
+    print('target %s' % target)
+    sqs_client.purge_queue(QueueUrl=target)
     return fulfill(event, 'success')

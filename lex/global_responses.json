@@ -7,5 +7,5 @@
   "denied": ["I swear I didn't do it."],
   "missing_aws_access_key": ["Access Key?????"],
   "missing_aws_secret_key": ["Secret Key?????"],
-  "missing_aws_default_region": ["Region?????"]
+  "missing_aws_region": ["Region?????"]
 }

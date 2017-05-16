@@ -1,5 +1,5 @@
-from lex.responses import validate_aws_config, get_slot
-from lex.helpers import get_namespace
+from lex.responses import get_slot
+from lex.helpers import get_namespace, validate_aws_config
 
 
 def handler(event):
