@@ -38,21 +38,26 @@ def get_id(event):
 
 
 def get_aws_config(event):
-    user_id = get_user_id(event['userId'])
-    config = user_config.get(user_id).get('config')
+    config = None
+
+    if not get_missing_aws_config_name(event['sessionAttributes']):
+        config = event['sessionAttributes']
+
+    if not config:
+        user_id = get_user_id(event['userId'])
+        config = user_config.get(user_id).get('config')
+        logging.info('User config: %s', str(config))
+
     if not config:
         team_id = get_team_id(event['userId'])
         config = user_config.get(team_id).get('config')
+        logging.info('Team config: %s', str(config))
 
-    if not config:
-        config = {}
-
-    if event['currentIntent']['slots'] and event['currentIntent']['slots'].get('aws_region'):
-        config['aws_region'] = event['currentIntent']['slots']['aws_region']
-    return config
+    logging.info('Found config: %s', str(config))
+    return config if config else {}
 
 
-def _get_missing_aws_config_name(config):
+def get_missing_aws_config_name(config):
     required_keys = ['aws_access_key', 'aws_secret_key', 'aws_region']
     for required_key in required_keys:
         if not config or not config.get(required_key):
@@ -60,21 +65,37 @@ def _get_missing_aws_config_name(config):
     return None
 
 
+def move_slots_into_session(event):
+    keys = ['aws_access_key', 'aws_secret_key', 'aws_region']
+    for key in keys:
+        if event['currentIntent']['slots'].get(key):
+            event['sessionAttributes'][key] = event['currentIntent']['slots'][key]
+
+
 def validate_aws_config(event):
+
+    move_slots_into_session(event)
+
+    logging.info('AWS config in sessionAttributes: %s', event['sessionAttributes'])
+
     config = get_aws_config(event)
-    if _get_missing_aws_config_name(config):
-        missing_config = _get_missing_aws_config_name(event['currentIntent']['slots'])
+
+    if get_missing_aws_config_name(config):
+        missing_config = get_missing_aws_config_name(event['sessionAttributes'])
         if missing_config:
+            event['sessionAttributes']['updateConfig'] = True
             return get_slot(event, missing_config, 'missing_' + missing_config)
 
+    if event['sessionAttributes'].get('updateConfig'):
+        event['sessionAttributes']['updateConfig'] = False
         # Insert or update config record
         user_config.update(event['userId'], {
             'last_modified_by': event['userId'],
             'config': {
                 'namespace': 'local',
-                'aws_access_key': event['currentIntent']['slots']['aws_access_key'],
-                'aws_secret_key': event['currentIntent']['slots']['aws_secret_key'],
-                'aws_region': event['currentIntent']['slots']['aws_region']
+                'aws_access_key': event['sessionAttributes']['aws_access_key'],
+                'aws_secret_key': event['sessionAttributes']['aws_secret_key'],
+                'aws_region': event['sessionAttributes']['aws_region']
             }
         })
 
@@ -103,6 +124,9 @@ def get_aws_client(service_name, aws_config):
 def aws_manager_decorator(func):
     def func_wrapper(event):
         aws_config = get_aws_config(event)
+
+        if event['sessionAttributes'].get('aws_region'):
+            aws_config['aws_region'] = event['sessionAttributes']['aws_region']
         try:
             return func(event, aws_config)
         except ClientError as e:

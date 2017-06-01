@@ -1,10 +1,12 @@
-from lex.responses import get_slot
-from lex.helpers import get_namespace, validate_aws_config
+from lex.helpers import delegate
 
 
 def handler(event):
-    event['currentIntent']['slots']['namespace'] = get_namespace(event['currentIntent']['slots']['namespace'])
-    if not event['currentIntent']['slots']['namespace']:
-        return get_slot(event, 'namespace', 'missing_namespace')
+    keys = ['aws_access_key', 'aws_secret_key', 'aws_region']
 
-    return validate_aws_config(event)
+    # remove old data
+    for key in keys:
+        if event['sessionAttributes'].get('new_' + key):
+            del event['sessionAttributes']['new_' + key]
+
+    return delegate(event)

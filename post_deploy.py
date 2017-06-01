@@ -10,5 +10,4 @@ response = client.add_permission(
     StatementId=str(uuid.uuid4()),
     Action='lambda:InvokeFunction',
     Principal='lex.amazonaws.com',
-    SourceArn='arn:aws:lex:us-east-1:680699795098:*'
 )
