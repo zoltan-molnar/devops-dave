@@ -53,6 +53,8 @@ def get_aws_config(event):
         config = user_config.get(team_id).get('config')
         logging.info('Team config: %s', str(config))
 
+    event['sessionAttributes'].update(config)
+
     logging.info('Found config: %s', str(config))
     return config if config else {}
 
@@ -125,13 +127,13 @@ def aws_manager_decorator(func):
     def func_wrapper(event):
         aws_config = get_aws_config(event)
 
-        if event['sessionAttributes'].get('aws_region'):
-            aws_config['aws_region'] = event['sessionAttributes']['aws_region']
+        if event['currentIntent']['slots'].get('aws_region'):
+            aws_config['aws_region'] = event['currentIntent']['slots']['aws_region']
         try:
             return func(event, aws_config)
         except ClientError as e:
             logging.info('AWS Client error: %s', str(e))
-            return deny(event, None, e)
+            return deny(event, None, str(e))
         except Exception as e:
             logging.exception(e)
             return deny(event, None, 'Sorry, but an unknown error happened.')

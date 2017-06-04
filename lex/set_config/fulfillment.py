@@ -9,11 +9,6 @@ def handler(event):
     # Let's get the namespace first.
     event['currentIntent']['slots']['namespace'] = get_namespace(event['currentIntent']['slots']['namespace'])
     if not event['currentIntent']['slots']['namespace']:
-        # remove old data
-        for key in keys:
-            if event['sessionAttributes'].get('new_' + key):
-                del event['sessionAttributes']['new_' + key]
-
         return get_slot(event, 'namespace', 'missing_namespace')
 
     # Copy the config into session attributes, but add a new_ prefix, so it won't affect the current config
