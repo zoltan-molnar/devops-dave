@@ -2,12 +2,15 @@ from random import randint
 from utils import file
 
 
-def get_response(lex_module, response_type):
+def get_response(lex_module, response, custom_response=False):
+    if custom_response:
+        return response
+
     global_responses = file.load_json_file('lex/global_responses')
     local_responses = file.load_json_file('lex/' + lex_module + '/responses')
 
-    responses = global_responses.get(response_type, [])
-    responses.extend(local_responses.get(response_type, []))
+    responses = global_responses.get(response, [])
+    responses.extend(local_responses.get(response, []))
 
     random_number = randint(0, len(responses) - 1)
 
@@ -40,14 +43,14 @@ def delegate(event):
     }
 
 
-def fulfill(event, response):
+def fulfill(event, response, custom_response=False):
     return {
         'dialogAction': {
             'type': 'Close',
             'fulfillmentState': 'Fulfilled',
             'message': {
               'contentType': 'PlainText',
-              'content': get_response(event['currentIntent']['name'], response)
+              'content': get_response(event['currentIntent']['name'], response, custom_response)
             }
         }
     }
