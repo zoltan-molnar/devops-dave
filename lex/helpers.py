@@ -123,6 +123,14 @@ def get_aws_client(service_name, aws_config):
         region_name=aws_config['aws_region'])
 
 
+def get_aws_resource(resource_name, aws_config):
+    return boto3.resource(
+        resource_name,
+        aws_access_key_id=aws_config['aws_access_key'],
+        aws_secret_access_key=aws_config['aws_secret_key'],
+        region_name=aws_config['aws_region'])
+
+
 def aws_manager_decorator(func):
     def func_wrapper(event):
         aws_config = get_aws_config(event)
