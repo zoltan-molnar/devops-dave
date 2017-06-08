@@ -5,8 +5,10 @@
   ],
   "confirm": ["Are you sure, you want to do this?"],
   "denied": ["I swear I didn't do it."],
-  "missing_aws_access_key": ["What is your AWS access key?"],
-  "missing_aws_secret_key": ["Could you please tell me your AWS secret key? (don't forget to delete that message after you sent it)"],
+  "missing_aws_access_key": [
+    "What is your AWS access key?\nNo worries, these informations will be *encrypted at rest* by AWS KMS and *encryped on the fly* by using TLS/SSL."
+  ],
+  "missing_aws_secret_key": ["Could you please tell me your AWS secret key? _(don't forget to delete that message after you sent it)_"],
   "missing_aws_region": ["What should I use as the default region?"],
   "missing_target": ["What is your target resource?"]
 }

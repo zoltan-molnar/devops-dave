@@ -1,12 +1,12 @@
-import logging
-
 from lex.helpers import get_target, get_aws_client, aws_manager_decorator
-from lex.responses import fulfill
+from lex.responses import fulfill, get_slot
 
 
 @aws_manager_decorator
 def handler(event, aws_config):
     target = get_target(event)
+    if not target:
+        return get_slot(event, 'target', 'missing_target')
     logs = get_aws_client('logs', aws_config)
     log_streams = logs.describe_log_streams(
         logGroupName=str(target),

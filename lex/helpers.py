@@ -46,17 +46,16 @@ def get_aws_config(event):
     if not config:
         user_id = get_user_id(event['userId'])
         config = user_config.get(user_id).get('config')
-        logging.info('User config: %s', str(config))
 
     if not config:
         team_id = get_team_id(event['userId'])
         config = user_config.get(team_id).get('config')
-        logging.info('Team config: %s', str(config))
+
+    config = config if config else {}
 
     event['sessionAttributes'].update(config)
 
-    logging.info('Found config: %s', str(config))
-    return config if config else {}
+    return config
 
 
 def get_missing_aws_config_name(config):
@@ -77,8 +76,6 @@ def move_slots_into_session(event):
 def validate_aws_config(event):
 
     move_slots_into_session(event)
-
-    logging.info('AWS config in sessionAttributes: %s', event['sessionAttributes'])
 
     config = get_aws_config(event)
 
