@@ -102,7 +102,7 @@ def validate_aws_config(event):
 
 
 def get_target(event):
-    target = str(event['currentIntent']['slots']['target'])
+    target = str(event['currentIntent']['slots']['target'] if event['currentIntent']['slots']['target'] else '')
 
     item_id = get_id(event)
     item = user_alias.get(item_id)

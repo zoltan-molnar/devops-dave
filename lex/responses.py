@@ -2,22 +2,31 @@ from random import randint
 from utils import file
 
 
-def get_response(lex_module, response, custom_response=False):
-    if custom_response:
-        return response
-
+def get_response_by_response_code(lex_module, response_code):
+    if not str(response_code):
+        return ''
     global_responses = file.load_json_file('lex/global_responses')
     local_responses = file.load_json_file('lex/' + lex_module + '/responses')
 
-    responses = global_responses.get(response, [])
-    responses.extend(local_responses.get(response, []))
+    responses = global_responses.get(response_code, [])
+    responses.extend(local_responses.get(response_code, []))
+
+    if not responses or not len(responses):
+        return ''
 
     random_number = randint(0, len(responses) - 1)
 
-    return responses[random_number]
+    return str(responses[random_number]) + '\n'
 
 
-def get_slot(event, slot_name, response):
+def get_response(lex_module, response_code='', custom_response=''):
+    response = get_response_by_response_code(lex_module, response_code)
+    response += str(custom_response)
+
+    return response
+
+
+def get_slot(event, slot_name, response='', custom_response=''):
     return {
         'sessionAttributes': event['sessionAttributes'] if event['sessionAttributes'] is not None else {},
         'dialogAction': {
@@ -27,7 +36,7 @@ def get_slot(event, slot_name, response):
             'slotToElicit': slot_name,
             'message': {
                 'contentType': 'PlainText',
-                'content': get_response(event['currentIntent']['name'], response)
+                'content': get_response(event['currentIntent']['name'], response, custom_response)
             }
         }
     }
@@ -43,7 +52,7 @@ def delegate(event):
     }
 
 
-def fulfill(event, response, custom_response=False):
+def fulfill(event, response='success', custom_response=''):
     return {
         'dialogAction': {
             'type': 'Close',
@@ -56,20 +65,20 @@ def fulfill(event, response, custom_response=False):
     }
 
 
-def deny(event, response, plain_text=''):
+def deny(event, response='deny', custom_response=''):
     return {
         'dialogAction': {
             'type': 'Close',
             'fulfillmentState': 'Failed',
             'message': {
               'contentType': 'PlainText',
-              'content': get_response(event['currentIntent']['name'], response) if not plain_text else plain_text
+              'content': get_response(event['currentIntent']['name'], response, custom_response)
             }
         }
     }
 
 
-def confirm(event):
+def confirm(event, response='confirm', custom_response=''):
     if event['currentIntent']['confirmationStatus'] == 'Denied':
         return deny(event, 'denied')
 
@@ -82,7 +91,7 @@ def confirm(event):
                 'type': 'ConfirmIntent',
                 'message': {
                   'contentType': 'PlainText',
-                  'content': get_response(event['currentIntent']['name'], 'confirm')
+                  'content': get_response(event['currentIntent']['name'], response, custom_response)
                 }
             }
         }

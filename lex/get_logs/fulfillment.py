@@ -31,4 +31,4 @@ def handler(event, aws_config):
     if not log:
         return fulfill(event, 'log_not_found')
 
-    return fulfill(event, str(log), True)
+    return fulfill(event, None, str(log))
