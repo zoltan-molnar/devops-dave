@@ -8,15 +8,27 @@ from lex.responses import fulfill
 def handler(event, aws_config):
     target = get_target(event)
     logs = get_aws_client('logs', aws_config)
-    response = logs.filter_log_events(
+    log_streams = logs.describe_log_streams(
         logGroupName=str(target),
-        limit=25
+        orderBy='LastEventTime',
+        descending=True,
+        limit=1
     )
 
-    logging.info(response.get('events'))
-
     log = ''
-    for record in response.get('events'):
-        log += record.get('message', '') + '\n'
+    if log_streams and log_streams.get('logStreams') and log_streams['logStreams'][0]:
+        log_stream = log_streams['logStreams'][0]['logStreamName']
+        response = logs.get_log_events(
+            logGroupName=str(target),
+            logStreamName=log_stream,
+            limit=25,
+            startFromHead=False
+        )
+
+        for record in response.get('events'):
+            log += record.get('message', '') + '\n'
+
+    if not log:
+        return fulfill(event, 'log_not_found')
 
     return fulfill(event, str(log), True)

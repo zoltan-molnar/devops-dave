@@ -1,2 +1,3 @@
 {
+  "log_not_found": ["I couldn't find any logs for this log stream."]
 }

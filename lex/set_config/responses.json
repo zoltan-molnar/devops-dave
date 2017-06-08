@@ -2,5 +2,5 @@
   "missing_namespace": ["Do you want to set a local config for yourself or a global config for your team?"],
   "denied": ["I left your config as it was"],
   "confirm": ["Do you want to overwrite your old config?"],
-  "success":["Config saved!"]
+  "success":["I saved your config."]
 }
