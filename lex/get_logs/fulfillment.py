@@ -7,6 +7,11 @@ def handler(event, aws_config):
     target = get_target(event)
     if not target:
         return get_slot(event, 'target', 'missing_target')
+
+    limit = 25
+    if event['currentIntent']['slots'].get('limit'):
+        limit = int(event['currentIntent']['slots']['limit'])
+
     logs = get_aws_client('logs', aws_config)
     log_streams = logs.describe_log_streams(
         logGroupName=str(target),
@@ -21,7 +26,7 @@ def handler(event, aws_config):
         response = logs.get_log_events(
             logGroupName=str(target),
             logStreamName=log_stream,
-            limit=25,
+            limit=limit,
             startFromHead=False
         )
 
