@@ -1,9 +1,11 @@
+from dateutil.parser import parse
+from datetime import datetime
 import logging
 import boto3
 from botocore.exceptions import ClientError
 
 from models import user_config, user_alias
-from lex.responses import deny, delegate, get_slot
+from lex.responses import deny, delegate, get_slot, fulfill
 
 
 def get_namespace(namespace):
@@ -143,3 +145,26 @@ def aws_manager_decorator(func):
             logging.exception(e)
             return deny(event, None, 'Sorry, but an unknown error happened.')
     return func_wrapper
+
+
+def schedule_if_needed(event, params):
+    date = event['currentIntent']['slots'].get('date')
+    time = event['currentIntent']['slots'].get('time')
+
+    if not date and not time:
+        return False
+
+    if not date:
+        return get_slot(event, 'missing_date')
+
+    if not time:
+        return get_slot(event, 'missing_time')
+
+    schedule_datetime = parse(str(date) + ' ' + str(time), ignoretz=True)
+
+    if schedule_datetime <= datetime.utcnow():
+        return deny(event, 'expired_date_time')
+
+    logging.info('Schedule event on: %s', str(schedule_datetime))
+
+    return fulfill(event, 'schedule_set')

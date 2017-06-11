@@ -17,6 +17,4 @@ def handler(event):
 
     response = import_module('lex.%s.%s' % (intent_name, invocation_source)).handler(event)
 
-    logging.info('Response for Lex message: %s', str(response))
-
     return response
