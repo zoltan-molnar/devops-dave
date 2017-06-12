@@ -5,8 +5,6 @@ from lex.responses import fulfill, get_slot
 @aws_manager_decorator
 def handler(event, aws_config):
     target = get_target(event)
-    if not target:
-        return get_slot(event, 'target', 'missing_target')
     sqs_client = get_aws_client('sqs', aws_config)
 
     sqs_client.purge_queue(QueueUrl=target)

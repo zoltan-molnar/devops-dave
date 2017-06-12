@@ -5,7 +5,7 @@ import boto3
 from botocore.exceptions import ClientError
 
 from models import user_config, user_alias
-from lex.responses import deny, delegate, get_slot, fulfill
+from lex.responses import deny, get_slot, fulfill
 
 
 def get_namespace(namespace):
@@ -100,7 +100,7 @@ def validate_aws_config(event):
             }
         })
 
-    return delegate(event)
+    return False
 
 
 def get_target(event):
@@ -168,3 +168,12 @@ def schedule_if_needed(event, params):
     logging.info('Schedule event on: %s', str(schedule_datetime))
 
     return fulfill(event, 'schedule_set')
+
+
+def aws_validator_decorator(func):
+    def func_wrapper(event):
+        invalid = validate_aws_config(event)
+        if invalid:
+            return invalid
+        return func(event)
+    return func_wrapper
