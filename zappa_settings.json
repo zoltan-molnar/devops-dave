@@ -7,6 +7,8 @@
         "s3_bucket": "zappa-devops-dave",
         "manage_roles": false,
         "role_name": "devops-dave-production",
-        "log_level": "DEBUG"
+        "log_level": "DEBUG",
+        "async_source": "sns",
+        "async_resources": true
     }
 }

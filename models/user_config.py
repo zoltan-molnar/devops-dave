@@ -20,6 +20,15 @@ def get(item_id):
     return item
 
 
+def get_scheduling_webhook(item_id):
+    item = user_configs_table.get_item(Key={'id': item_id}).get('Item', {})
+    logging.info('Get user-configs.get_scheduling_webhook ID: %s item: %s', item_id, item)
+    if not item:
+        return {}
+    webhook = item.get('scheduling_webhook')
+    return webhook if webhook else ''
+
+
 def update(item_id, params):
     update_expression = '''
     SET
@@ -37,6 +46,28 @@ def update(item_id, params):
             ':created_at': str(datetime.utcnow()),
             ':last_modified_by': params['last_modified_by'],
             ':config': kms.encrypt(json.dumps(params['config']))
+        },
+        ReturnValues='ALL_NEW'
+    ).get('Attributes')
+
+
+def update_scheduling_webhook(item_id, params):
+    update_expression = '''
+    SET
+        created_at = if_not_exists(created_at, :created_at),
+        updated_at = :updated_at,
+        last_modified_by = :last_modified_by,
+        scheduling_webhook = :scheduling_webhook
+    '''
+    logging.info('Update user-configs. ID: %s params: %s', item_id, params)
+    return user_configs_table.update_item(
+        Key={'id': item_id},
+        UpdateExpression=update_expression,
+        ExpressionAttributeValues={
+            ':updated_at': str(datetime.utcnow()),
+            ':created_at': str(datetime.utcnow()),
+            ':last_modified_by': params['last_modified_by'],
+            ':scheduling_webhook': params['scheduling_webhook']
         },
         ReturnValues='ALL_NEW'
     ).get('Attributes')

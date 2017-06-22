@@ -27,4 +27,5 @@ class Main(Resource):
 
 api.add_resource(Main, '/')
 
-api.add_resource(mock.WorkerMock, '/worker/<string:function>')
+if CONFIG['enable_worker_api']:
+    api.add_resource(mock.WorkerMock, '/worker/<string:function>')

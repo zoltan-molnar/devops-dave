@@ -1,0 +1,4 @@
+{
+  "missing_webhook": ["Please, set up an incoming webhook for me and copy the URL here."],
+  "schedule_set_in_progress": ["You can cancel scheduling by saying cancel now."]
+}

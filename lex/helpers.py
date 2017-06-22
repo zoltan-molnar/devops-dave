@@ -1,9 +1,11 @@
+from copy import copy
 import logging
 import boto3
 from botocore.exceptions import ClientError
 
-from models import user_config, user_alias
-from lex.responses import deny, get_slot, fulfill
+from utils.slack import send_message_via_webhook
+from models import user_config, user_alias, scheduled_action
+from lex.responses import deny, delegate, get_slot, fulfill
 
 
 def get_namespace(namespace):
@@ -152,3 +154,43 @@ def aws_validator_decorator(func):
             return invalid
         return func(event)
     return func_wrapper
+def can_be_scheduled_decorator(func):
+    def func_wrapper(event):
+        if event['sessionAttributes'] and event['sessionAttributes'].get('scheduling_status'):
+            if event['sessionAttributes']['scheduling_status'] == 'scheduling':
+                return __schedule(event)
+        try:
+            if event['sessionAttributes'] and event['sessionAttributes'].get('scheduling_status'):
+                if event['sessionAttributes']['scheduling_status'] == 'processing':
+                    response = func(event)
+                    return send_response_to_slack(event, response)
+            return func(event)
+        except Exception as e:
+            logging.exception(e)
+            return deny(event, None, 'Sorry, but an unknown error happened.')
+    return func_wrapper
+
+
+def send_response_to_slack(event, response):
+    user_id = get_id(event)
+    webhook = user_config.get_scheduling_webhook(user_id)
+
+    content = response['dialogAction']['message']['content']
+
+    return send_message_via_webhook(webhook, {'text': content})
+
+
+def __schedule(event):
+    event_copy = copy(event)
+    event_copy['sessionAttributes'] = {}
+
+    scheduled_datetime = event['sessionAttributes']['scheduling_datetime']
+
+    scheduled_action.add({
+        'added_by': get_id(event_copy),
+        'event': event_copy,
+        'scheduled_datetime': scheduled_datetime,
+        'execution_status': 'not_started'
+    })
+
+    return fulfill(event, 'schedule_set')

@@ -23,7 +23,7 @@ def get_response(lex_module, response_code='', custom_response=''):
     response = get_response_by_response_code(lex_module, response_code)
     response += str(custom_response)
 
-    return response
+    return response if response else 'Response is missing'
 
 
 def get_slot(event, slot_name, response='', custom_response=''):
@@ -54,6 +54,7 @@ def delegate(event):
 
 def fulfill(event, response='success', custom_response=''):
     return {
+        'sessionAttributes': event['sessionAttributes'] if event['sessionAttributes'] is not None else {},
         'dialogAction': {
             'type': 'Close',
             'fulfillmentState': 'Fulfilled',
@@ -67,6 +68,7 @@ def fulfill(event, response='success', custom_response=''):
 
 def deny(event, response='deny', custom_response=''):
     return {
+        'sessionAttributes': event['sessionAttributes'] if event['sessionAttributes'] is not None else {},
         'dialogAction': {
             'type': 'Close',
             'fulfillmentState': 'Failed',
