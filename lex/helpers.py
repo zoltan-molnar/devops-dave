@@ -154,6 +154,8 @@ def aws_validator_decorator(func):
             return invalid
         return func(event)
     return func_wrapper
+
+
 def can_be_scheduled_decorator(func):
     def func_wrapper(event):
         if event['sessionAttributes'] and event['sessionAttributes'].get('scheduling_status'):
@@ -163,7 +165,8 @@ def can_be_scheduled_decorator(func):
             if event['sessionAttributes'] and event['sessionAttributes'].get('scheduling_status'):
                 if event['sessionAttributes']['scheduling_status'] == 'processing':
                     response = func(event)
-                    return send_response_to_slack(event, response)
+                    send_response_to_slack(event, response)
+                    return response
             return func(event)
         except Exception as e:
             logging.exception(e)

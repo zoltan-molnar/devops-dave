@@ -1,7 +1,0 @@
-{
-  "alias": ["What is the alias you want to use? It could be something like staging or your-service-dev."],
-  "target": ["Where should this alias point?"],
-  "denied": ["Okay, I didn't overwrite it. You can use it as you did before this whole thing happened"],
-  "confirm": ["You already set an alias for this. Do you want to overwrite it?"],
-  "success":["I saved your alias and probably a few minutes of your time. And a bunch of copy pasting..."]
-}

@@ -8,6 +8,9 @@ from models import user_config
 
 def handler(event):
     webhook = event['currentIntent']['slots'].get('webhook')
+    if not webhook:
+        webhook = get_webhook_if_can(event['inputTranscript'])
+
     date = event['currentIntent']['slots'].get('date')
     time = event['currentIntent']['slots'].get('time')
 
@@ -39,3 +42,13 @@ def handler(event):
     logging.info('Schedule event on: %s', str(schedule_datetime))
 
     return delegate(event)
+
+
+def get_webhook_if_can(message):
+    # This is a very big hack, but I Lex doesn't accept URL as slot value
+    # At least I couldn't find a good slottype for it
+    message = str(message)
+    if message and message[0] == '<' and message[-1] == '>':
+        if message.startswith('<https://hooks.slack.com/services/'):
+            return message[1:-1]
+    return ''

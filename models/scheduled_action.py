@@ -2,7 +2,7 @@ import logging
 from uuid import uuid4
 from datetime import datetime
 from utils import dynamodb
-from boto3.dynamodb.conditions import Attr
+from boto3.dynamodb.conditions import Key, Attr
 
 table = dynamodb.Table('scheduled-actions')
 
@@ -42,12 +42,10 @@ def add(params):
 
 
 def list_for_scheduling():
-    return table.query(
-        ScanIndexForward=True,
-        FilterExpression=Attr('execution_status').eq('not_started').__and__(
-            Attr('scheduled_time').lte(str(datetime.utcnow()))
-        )
-    )
+    return table.scan(
+        FilterExpression=Key('execution_status').eq('not_started') &
+                         Attr('scheduled_datetime').lte(str(datetime.utcnow()))
+    ).get('Items', [])
 
 
 def update_status(item_id, new_status):
