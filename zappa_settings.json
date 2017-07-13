@@ -7,8 +7,13 @@
         "s3_bucket": "zappa-devops-dave",
         "manage_roles": false,
         "role_name": "devops-dave-production",
-        "log_level": "DEBUG",
+        "log_level": "ERROR",
         "async_source": "sns",
-        "async_resources": true
+        "async_resources": true,
+        "keep_warm": false,
+        "events": [{
+            "function": "worker.execute_lex_scheduled_action",
+            "expression": "rate(5 minutes)"
+        }]
     }
 }

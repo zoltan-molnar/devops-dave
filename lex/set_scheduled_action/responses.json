@@ -1,4 +1,4 @@
 {
-  "missing_webhook": ["Please, set up an incoming webhook for me and copy the URL here."],
-  "schedule_set_in_progress": ["You can cancel scheduling by saying cancel now."]
+  "missing_webhook": ["Please, set up a slack incoming webhook for me and copy the URL here."],
+  "schedule_set_in_progress": ["You can cancel scheduling by saying cancel now. Otherwise, just type your devops command as usual. Like: \"show logs\""]
 }

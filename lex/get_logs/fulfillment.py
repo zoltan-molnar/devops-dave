@@ -5,7 +5,12 @@ from lex.responses import fulfill, get_slot
 @can_be_scheduled_decorator
 @aws_manager_decorator
 def handler(event, aws_config):
-    target = get_target(event)
+    target = str(get_target(event))
+
+    # there is a strange bug, that AWS Lex sometimes cuts down the first / char
+    # this should solve it
+    if target and target[0:1] != '/':
+        target = '/' + target
 
     limit = 25
     if event['currentIntent']['slots'].get('limit'):

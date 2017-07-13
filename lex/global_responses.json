@@ -1,18 +1,34 @@
 {
   "success": [
     "I did it what you have asked. As you asked. Like a true friend.",
-    "I hope you meant it, because no turning back now."
+    "I hope you meant it, because no turning back now.",
+    "Done. It was a pleasure dealing with you my friend.",
+    "Ohh yeah, it worked.",
+    "S*it, there wasn't any error. That must mean a bug! I'm just kidding. Probably, it just worked.",
+    "#success #cheers #hashtag"
   ],
-  "confirm": ["Are you sure, you want to do this?"],
-  "denied": ["I swear I didn't do it."],
+  "confirm": [
+    "Are you sure, you want to do this?",
+    "Should I continue? Just say yes and I will. I hope you can guess the result of a no.",
+    "Are you sure? Because I'm not."
+  ],
+  "denied": [
+    "I swear I didn't do it.",
+    "Funny, when you say this. I don't really like declining, but from you it's fine.",
+    "Thanks for letting me doing some hard research work, then just opting out before I could finish it"
+  ],
   "missing_aws_access_key": [
-    "What is your AWS access key?\nNo worries, these information will be *encrypted at rest* by AWS KMS and *encryped on the fly* by using TLS/SSL."
+    "What is your AWS access key?\nNo worries, these information will be encrypted at rest by AWS KMS and encryped on the fly by using TLS/SSL."
   ],
-  "missing_aws_secret_key": ["Could you please tell me your AWS secret key? _(don't forget to delete that message after you sent it)_"],
-  "missing_aws_region": ["What should I use as the default region?"],
+  "missing_aws_secret_key": ["Could you please tell me your AWS secret key? (don't forget to delete that message after you sent it)"],
+  "missing_aws_region": ["What should I use as the default region? (like: \"us-east-1\")"],
   "missing_target": ["What is your target resource?"],
-  "missing_date": ["What day do you want to perform this action? _(don't forget that it must be in UTC timezone)_"],
-  "missing_time": ["What time do you want to perform this action? _(don't forget that it must be in UTC timezone)_"],
+  "missing_date": ["What day do you want to perform this action? (don't forget that it must be in UTC timezone)"],
+  "missing_time": ["What time do you want to perform this action? (don't forget that it must be in UTC timezone)"],
   "expired_date_time": ["I thought you understood that I'm not a time machine. I'm working on that, but it takes time to finish it. In the meantime, you should only ask me to do things in the present or in the future instead of the past."],
-  "schedule_set": ["Okay, I set the schedule."]
+  "schedule_set": [
+    "Okay, I set the schedule.",
+    "Scheduling done. Anything else?",
+    "I will complete your dirty job later, so you can pretend working"
+  ]
 }

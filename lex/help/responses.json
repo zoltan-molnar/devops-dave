@@ -1,5 +1,5 @@
 {
   "help": [
-    "I don't know everything, just yet, but I know how to: get your CloudWatch logs for you, restart an EC2 instance, purge a queue, invalidate a CloudFront distribution and to invoke a lambda function.\nI can even set aliases/references to your resources, so you can use an easy to remember alias like 'staging' instead of the complicated, random generated one.\n\n*Available commands:* invoke lambda, invalidate cloudfront, restart, purge, show logs, set alias, set config"
+    "I don't know everything, just yet, but I know how to: get your CloudWatch logs for you, restart an EC2 instance, purge a queue, invalidate a CloudFront distribution and to invoke a lambda function.\nI can also schedule these actions for you and execute them later.\nI can even set aliases/references to your resources, so you can use an easy to remember alias like 'staging' instead of the complicated, random generated one.\n\n*Available commands:* invoke lambda, invalidate cloudfront, restart, purge, show logs, set alias, set config, set scheduled action"
   ]
 }
