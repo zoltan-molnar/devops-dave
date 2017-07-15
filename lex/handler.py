@@ -10,7 +10,7 @@ def handler(event):
         'FulfillmentCodeHook': 'fulfillment',
     }
 
-    event['sessionAttributes'] = event['sessionAttributes'] if 'sessionAttributes' in event else {}
+    event['sessionAttributes'] = event['sessionAttributes'] if event.get('sessionAttributes') else {}
 
     intent_name = event['currentIntent']['name']
     invocation_source = sources[event['invocationSource']]
