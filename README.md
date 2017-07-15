@@ -8,7 +8,7 @@ colleagues. Even if they are not programmer.
 
 Currently, it's a slack bot (Facebook Messenger is under testing). You can easily install it by clicking here:
 
-[<img src="https://platform.slack-edge.com/img/add_to_slack.png">](https://slack.com/oauth/authorize?scope=incoming-webhook,commands,bot&client_id=172719434563.172125638464)
+[<img src="https://platform.slack-edge.com/img/add_to_slack.png">](https://slack.com/oauth/authorize?&client_id=172719434563.172125638464&scope=bot,chat:write:bot,im:history,incoming-webhook)
 
 
 ## Usage
