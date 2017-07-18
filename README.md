@@ -6,9 +6,11 @@ colleagues. Even if they are not programmer.
 
 ## Install
 
-Currently, it's a slack bot (Facebook Messenger is under testing). You can easily install it by clicking here:
+You can easily install the Slack bot by clicking here:
 
 [<img src="https://platform.slack-edge.com/img/add_to_slack.png">](https://slack.com/oauth/authorize?&client_id=172719434563.172125638464&scope=bot,chat:write:bot,im:history,incoming-webhook)
+
+Or you can use the Messenger bot by [clicking here](m.me/devopsdavebot)
 
 
 ## Usage
